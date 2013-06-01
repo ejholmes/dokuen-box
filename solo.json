@@ -1,0 +1,27 @@
+{
+    "run_list": [
+        "recipe[dokuen]"
+    ],
+    "rbenv": {
+        "global": "1.9.3-p392",
+        "rubies": [ "1.9.3-p392", "2.0.0-p195" ],
+        "gems": {
+            "1.9.3-p392": [
+                { "name": "bundler", "version": "1.2.1" },
+                { "name": "rake" },
+                { "name": "rack" }
+            ],
+            "2.0.0-p195": [
+                { "name": "bundler", "version": "1.2.1" },
+                { "name": "rake" },
+                { "name": "rack" }
+            ]
+        }
+    },
+    "postgresql": {
+        "dir": "/data/postgres",
+        "password": {
+            "postgres": ""
+        }
+    }
+}
