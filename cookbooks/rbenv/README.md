@@ -13,13 +13,16 @@ Most likely, this is the typical case. Include `recipe[rbenv::system]` in your
 run\_list and override the defaults you want changed. See [below](#attributes)
 for more details.
 
+If your platform is the Mac, you may need to modify your
+[profile](#mac-system-note).
+
 ### <a name="usage-user-rubies"></a> rbenv Installed For A Specific User with Rubies
 
 If you want a per-user install (like on a Mac/Linux workstation for
 development, CI, etc.), include `recipe[rbenv::user]` in your run\_list and
 add a user hash to the `user_installs` attribute list. For example:
 
-    node['rbenv']['user_installs'] = [
+    node.default['rbenv']['user_installs'] = [
       { 'user'    => 'tflowers',
         'rubies'  => ['1.9.3-p0', 'jruby-1.6.5'],
         'global'  => '1.9.3-p0',
@@ -46,13 +49,16 @@ LWRPs, then include `recipe[rbenv::system_install]` in your run\_list
 to prevent a default rbenv Ruby being installed. See the
 [Resources and Providers](#lwrps) section for more details.
 
+If your platform is the Mac, you may need to modify your
+[profile](#mac-system-note).
+
 ### <a name="usage-user"></a> rbenv Installed For A Specific User and LWRPs Defined
 
 If you want to manage your own rbenv environment for users with the provided
 LWRPs, then include `recipe[rbenv::user_install]` in your run\_list and add a
 user hash to the `user_installs` attribute list. For example:
 
-    node['rbenv']['user_installs'] = [
+    node.default['rbenv']['user_installs'] = [
       { 'user' => 'tflowers' }
     ]
 
@@ -107,53 +113,51 @@ this cookbook. All the methods listed below assume a tagged version release
 is the target, but omit the tags to get the head of development. A valid
 Chef repository structure like the [Opscode repo][chef_repo] is also assumed.
 
-### <a name="installation-librarian"></a> Using Librarian
+### <a name="installation-berkshelf"></a> Using Berkshelf
+
+[Berkshelf][berkshelf] is a cookbook dependency manager and development
+workflow assistant. To install Berkshelf:
+
+    cd chef-repo
+    gem install berkshelf
+    berks init
+
+To reference the Git version:
+
+    repo="fnichol/chef-rbenv"
+    latest_release=$(curl -s https://api.github.com/repos/$repo/git/refs/tags \
+    | ruby -rjson -e '
+      j = JSON.parse(STDIN.read);
+      puts j.map { |t| t["ref"].split("/").last }.sort.last
+    ')
+    cat >> Berksfile <<END_OF_BERKSFILE
+    cookbook 'rbenv',
+      :git => 'git://github.com/$repo.git', :branch => '$latest_release'
+    END_OF_BERKSFILE
+    berks install
+
+### <a name="installation-librarian"></a> Using Librarian-Chef
 
 [Librarian-Chef][librarian] is a bundler for your Chef cookbooks.
-Include a reference to the cookbook in a [Cheffile][cheffile] and run
-`librarian-chef install`. To install Librarian-Chef:
+To install Librarian-Chef:
 
-    gem install librarian
     cd chef-repo
+    gem install librarian
     librarian-chef init
 
 To reference the Git version:
 
+    repo="fnichol/chef-rbenv"
+    latest_release=$(curl -s https://api.github.com/repos/$repo/git/refs/tags \
+    | ruby -rjson -e '
+      j = JSON.parse(STDIN.read);
+      puts j.map { |t| t["ref"].split("/").last }.sort.last
+    ')
     cat >> Cheffile <<END_OF_CHEFFILE
     cookbook 'rbenv',
-      :git => 'https://github.com/fnichol/chef-rbenv', :ref => 'v0.6.10'
+      :git => 'git://github.com/$repo.git', :ref => '$latest_release'
     END_OF_CHEFFILE
     librarian-chef install
-
-### <a name="installation-kgc"></a> Using knife-github-cookbooks
-
-The [knife-github-cookbooks][kgc] gem is a plugin for *knife* that supports
-installing cookbooks directly from a GitHub repository. To install with the
-plugin:
-
-    gem install knife-github-cookbooks
-    cd chef-repo
-    knife cookbook github install fnichol/chef-rbenv/v0.6.10
-
-### <a name="installation-tarball"></a> As a Tarball
-
-If the cookbook needs to downloaded temporarily just to be uploaded to a Chef
-Server or Opscode Hosted Chef, then a tarball installation might fit the bill:
-
-    cd chef-repo/cookbooks
-    curl -Ls https://github.com/fnichol/chef-rbenv/tarball/v0.6.10 | tar xfz - && \
-      mv fnichol-chef-rbenv-* rbenv
-
-### <a name="installation-gitsubmodule"></a> As a Git Submodule
-
-A dated practice (which is discouraged) is to add cookbooks as Git
-submodules. This is accomplishes like so:
-
-    cd chef-repo
-    git submodule add git://github.com/fnichol/chef-rbenv.git cookbooks/rbenv
-    git submodule init && git submodule update
-
-**Note:** the head of development will be linked here, not a tagged release.
 
 ### <a name="installation-platform"></a> From the Opscode Community Platform
 
@@ -222,7 +226,7 @@ The default is `"git://github.com/sstephenson/rbenv.git"`.
 A specific Git branch/tag/reference to use when installing rbenv. For
 example, to pin rbenv to a specific release:
 
-    node['ruby_build']['git_ref'] = "v0.2.1"
+    node.default['ruby_build']['git_ref'] = "v0.2.1"
 
 The default is `"master"`.
 
@@ -250,7 +254,7 @@ A list of additional system-wide rubies to be built and installed using the
 [ruby\_build cookbook][ruby_build_cb]. You **must** include `recipe[ruby_build]`
 in your run\_list for the `rbenv_ruby` LWRP to work properly. For example:
 
-    node['rbenv']['rubies'] = [ "1.9.3-p0", "jruby-1.6.5" ]
+    node.default['rbenv']['rubies'] = [ "1.9.3-p0", "jruby-1.6.5" ]
 
 The default is an empty array: `[]`.
 
@@ -260,7 +264,7 @@ A list of additional system-wide rubies to be built and installed (using the
 [ruby\_build cookbook][ruby_build_cb]) per-user when not explicitly set.
 For example:
 
-    node['rbenv']['user_rubies'] = [ "1.8.7-p352" ]
+    node.default['rbenv']['user_rubies'] = [ "1.8.7-p352" ]
 
 The default is an empty array: `[]`.
 
@@ -270,7 +274,7 @@ A hash of gems to be installed into arbitrary rbenv-managed rubies system wide.
 See the [rbenv_gem](#lwrps-rbgem) resource for more details about the options
 for each gem hash and target Ruby environment. For example:
 
-    node['rbenv']['gems'] = {
+    node.default['rbenv']['gems'] = {
       '1.9.3-p0' => [
         { 'name'    => 'vagrant' },
         { 'name'    => 'bundler'
@@ -299,6 +303,23 @@ If using the `vagrant` recipe, this sets the path to the package-installed
 *chef-solo* binary.
 
 The default is `"/opt/ruby/bin/chef-solo"`.
+
+### <a name="attributes-create-profiled"></a> create_profiled
+
+The user's shell needs to know about rbenv's location and set up the
+PATH environment variable. This is handled in the
+[system_install](#recipes-system_install) and
+[user_install](#recipes-user_install) recipes by dropping off
+`/etc/profile.d/rbenv.sh`. However, this requires root privilege,
+which means that a user cannot use a "user install" for only their
+user.
+
+Set this attribute to `false` to skip creation of the
+`/etc/profile.d/rbenv.sh` template. For example:
+
+    node.default['rbenv']['create_profiled'] = false
+
+The default is `true`.
 
 ## <a name="lwrps"></a> Resources and Providers
 
@@ -895,6 +916,13 @@ usage.
       action :reinstall
     end
 
+## <a name="mac-system-note"></a> System-Wide Mac Installation Note
+
+This cookbook takes advantage of managing profile fragments in an
+`/etc/profile.d` directory, common on most Unix-flavored platforms.
+Unfortunately, Mac OS X does not support this idiom out of the box,
+so you may need to [modify][mac_profile_d] your user profile.
+
 ## <a name="development"></a> Development
 
 * Source hosted at [GitHub][repo]
@@ -921,12 +949,14 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 
+[berkshelf]:        http://berkshelf.com/
 [chef_repo]:        https://github.com/opscode/chef-repo
 [cheffile]:         https://github.com/applicationsonline/librarian/blob/master/lib/librarian/chef/templates/Cheffile
 [gem_package_options]: http://wiki.opscode.com/display/chef/Resources#Resources-GemPackageOptions
 [kgc]:              https://github.com/websterclay/knife-github-cookbooks#readme
 [librarian]:        https://github.com/applicationsonline/librarian#readme
 [lwrp]:             http://wiki.opscode.com/display/chef/Lightweight+Resources+and+Providers+%28LWRP%29
+[mac_profile_d]:    http://hints.macworld.com/article.php?story=20011221192012445
 [package_resource]: http://wiki.opscode.com/display/chef/Resources#Resources-Package
 [rb_readme]:        https://github.com/sstephenson/ruby-build#readme
 [rb_definitions]:   https://github.com/sstephenson/ruby-build/tree/master/share/ruby-build

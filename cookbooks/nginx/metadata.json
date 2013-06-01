@@ -10,17 +10,22 @@
     "debian": ">= 0.0.0",
     "centos": ">= 0.0.0",
     "redhat": ">= 0.0.0",
+    "amazon": ">= 0.0.0",
+    "scientific": ">= 0.0.0",
+    "oracle": ">= 0.0.0",
     "fedora": ">= 0.0.0"
   },
   "dependencies": {
     "build-essential": ">= 0.0.0",
+    "yum": ">= 0.0.0",
+    "apt": ">= 0.0.0",
     "runit": ">= 0.0.0",
-    "bluepill": ">= 0.0.0",
-    "ohai": "~> 1.0.2"
+    "ohai": ">= 1.1.4"
   },
   "recommendations": {
   },
   "suggestions": {
+    "bluepill": ">= 0.0.0"
   },
   "conflicting": {
   },
@@ -147,13 +152,14 @@
       "type": "array",
       "default": [
         "text/plain",
-        "text/html",
         "text/css",
         "application/x-javascript",
         "text/xml",
         "application/xml",
         "application/xml+rss",
-        "text/javascript"
+        "text/javascript",
+        "application/javascript",
+        "application/json"
       ],
       "choice": [
 
@@ -232,9 +238,62 @@
 
       ]
     },
+    "nginx/types_hash_max_size": {
+      "display_name": "Nginx Types Hash Max Size",
+      "default": "2048",
+      "choice": [
+
+      ],
+      "calculated": false,
+      "type": "string",
+      "required": "optional",
+      "recipes": [
+
+      ]
+    },
+    "nginx/types_hash_bucket_size": {
+      "display_name": "Nginx Types Hash Bucket Size",
+      "default": "64",
+      "choice": [
+
+      ],
+      "calculated": false,
+      "type": "string",
+      "required": "optional",
+      "recipes": [
+
+      ]
+    },
     "nginx/disable_access_log": {
       "display_name": "Disable Access Log",
       "default": "false",
+      "choice": [
+
+      ],
+      "calculated": false,
+      "type": "string",
+      "required": "optional",
+      "recipes": [
+
+      ]
+    },
+    "nginx/default_site_enabled": {
+      "display_name": "Default site enabled",
+      "default": "true",
+      "choice": [
+
+      ],
+      "calculated": false,
+      "type": "string",
+      "required": "optional",
+      "recipes": [
+
+      ]
+    },
+    "nginx/sendfile": {
+      "display_name": "Nginx sendfile",
+      "description": "Whether to enable sendfile",
+      "default": "on",
       "choice": [
 
       ],
@@ -252,5 +311,5 @@
     "nginx": "Installs nginx package and sets up configuration with Debian apache style with sites-enabled/sites-available",
     "nginx::source": "Installs nginx from source and sets up configuration with Debian apache style with sites-enabled/sites-available"
   },
-  "version": "0.101.2"
+  "version": "1.6.0"
 }

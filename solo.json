@@ -1,6 +1,11 @@
 {
     "run_list": [
-        "recipe[dokuen]"
+        "recipe[ruby_build]",
+        "recipe[rbenv::system]",
+        "recipe[postgresql]",
+        "recipe[postgresql::server]",
+        "recipe[nginx]",
+        "recipe[gitolite::basic]"
     ],
     "rbenv": {
         "global": "1.9.3-p392",
@@ -13,15 +18,17 @@
             ],
             "2.0.0-p195": [
                 { "name": "bundler", "version": "1.2.1" },
-                { "name": "rake" },
                 { "name": "rack" }
             ]
         }
     },
     "postgresql": {
-        "dir": "/data/postgres",
         "password": {
             "postgres": ""
         }
+    },
+    "gitolite": {
+      "admin": "ejholmes",
+      "ssh_key": "ssh-rsa AAAAB3NzaC1yc2EAAAABJQAAAIEAmZwvDen2czWq6cvDZ31Dw/8oWXp1dx1i+K/TV+kO31NDkETuasl80SfPWNyPDrj/nNGZCGnAsgU5OKkNF2hul9IVsW2c0uo/+D5r0FRkdQOuVZrmt8gjCJPuB0+Z4wGaaVz8K30QuD6hE1OIqLRYdSafHHh1b+H905D4Bw1bIqM= eric@ejholmes.net"
     }
 }
