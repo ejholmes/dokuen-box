@@ -7,8 +7,8 @@ You can test the recipes against a fresh installation of Ubuntu 12.04.
 First, build the basebox:
 
 ```bash
-$ vagrant basebox build paas
-$ vagrant basebox export paas
+$ bundle exec veewee vbox build paas
+$ bundle exec veewee vbox export paas
 ```
 
 Then start the server with Vagrant:

@@ -1,5 +1,5 @@
-source :rubygems
+source 'https://rubygems.org'
 
 gem 'rake'
-gem 'vagrant'
-gem 'veewee'
+gem 'vagrant', '~> 1.0.7'
+gem 'veewee', github: 'jedi4ever/veewee'
