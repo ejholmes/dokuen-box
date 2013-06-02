@@ -1,11 +1,7 @@
 {
     "run_list": [
-        "recipe[ruby_build]",
-        "recipe[rbenv::system]",
         "recipe[postgresql]",
         "recipe[postgresql::server]",
-        "recipe[nginx]",
-        "recipe[gitolite::basic]",
         "recipe[dokuen::default]"
     ],
     "rbenv": {

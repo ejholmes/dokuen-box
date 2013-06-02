@@ -1,4 +1,7 @@
+include_recipe "ruby_build::default"
 include_recipe "rbenv::system"
+include_recipe "nginx"
+include_recipe "gitolite::basic"
 
 user node['dokuen']['user'] do
   action :create

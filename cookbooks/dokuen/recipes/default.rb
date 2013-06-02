@@ -1,4 +1,7 @@
+include_recipe "ruby_build::default"
 include_recipe "rbenv::system"
+include_recipe "nginx"
+include_recipe "gitolite::basic"
 
 user node['dokuen']['user'] do
   action :create
@@ -43,6 +46,8 @@ cookbook_file "#{node['gitolite']['home']}/.gitolite.rc" do
   group  node['gitolite']['group']
 end
 
+# TODO: This doesn't work because we actually need to clone to repo and commit
+# the change...
 ruby_block "insert_line" do
   block do
     file = Chef::Util::FileEdit.new("#{node['gitolite']['home']}/.gitolite/conf/gitolite.conf")
