@@ -46,22 +46,6 @@ cookbook_file "#{node['gitolite']['home']}/.gitolite.rc" do
   group  node['gitolite']['group']
 end
 
-# TODO: This doesn't work because we actually need to clone to repo and commit
-# the change...
-ruby_block "insert_line" do
-  block do
-    file = Chef::Util::FileEdit.new("#{node['gitolite']['home']}/.gitolite/conf/gitolite.conf")
-    file.insert_line_if_no_match("repo apps", content = <<EOF)
-
-repo apps/[a-zA-Z0-9].*
-    C = @all
-    RW+ = CREATOR
-    config hooks.pre = "#{node['dokuen']['directory']}/bin/dokuen-deploy"
-EOF
-    file.write_file
-  end
-end
-
 template "#{node['nginx']['dir']}/conf.d/dokuen.conf" do
   source "nginx.erb"
 end

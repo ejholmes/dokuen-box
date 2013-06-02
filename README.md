@@ -54,3 +54,13 @@ Here's a list of what is running on the server:
   git clone git://github.com/ddollar/mason.git
   cd mason && gem build mason.gemspec && gem install *.gem
   ```
+
+* Once provisioned, you need to manually clone the gitolite-admin repo and
+  change `./config/gitolite.conf` to have the following:
+
+  ```
+  repo apps/[a-zA-Z0-9].*
+      C = @all
+      RW+ = CREATOR
+      config hooks.pre = "/usr/local/var/bin/dokuen-deploy"
+  ```
