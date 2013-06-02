@@ -4,6 +4,24 @@ user node['dokuen']['user'] do
   action :create
 end
 
+group node['gitolite']['group'] do
+  action  :modify
+  members node['dokuen']['user']
+  append  true
+end
+
+directory "#{node['gitolite']['home']}/repositories" do
+  mode 0775
+  action :create
+end
+
+directory "#{node['gitolite']['home']}/.mason" do
+  mode 0775
+  group node['gitolite']['username']
+  user  node['gitolite']['group']
+  action :create
+end
+
 rbenv_gem "dokuen" do
   action :install
 end
