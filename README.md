@@ -44,3 +44,13 @@ Here's a list of what is running on the server:
 * Redis
 * Dokuen
 * Ruby 1.9.3/2.0.0
+
+## Gotchas
+
+* If you get errors with buildpacks, it may be caused by mason. Manually
+  upgrading the mason gem may be a good idea:
+
+  ```bash
+  git clone git://github.com/ddollar/mason.git
+  cd mason && gem build mason.gemspec && gem install *.gem
+  ```
