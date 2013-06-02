@@ -5,7 +5,8 @@
         "recipe[postgresql]",
         "recipe[postgresql::server]",
         "recipe[nginx]",
-        "recipe[gitolite::basic]"
+        "recipe[gitolite::basic]",
+        "recipe[dokuen::default]"
     ],
     "rbenv": {
         "global": "1.9.3-p392",

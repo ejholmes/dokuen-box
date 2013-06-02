@@ -1,0 +1,4 @@
+Runas_Alias   APPUSERS = dokuen
+
+git           ALL=(APPUSERS) NOPASSWD: <%= node['dokuen']['directory'] %>/bin/dokuen
+<%= node['dokuen']['user'] %>        ALL=NOPASSWD: /usr/local/rbenv/versions/1.9.3-p392/bin/dokuen_restart_nginx
