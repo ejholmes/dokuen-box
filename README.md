@@ -21,6 +21,7 @@ $ vagrant up
 Now provision the server using chef by running:
 
 ```bash
+$ bundle exec librarian-chef install
 $ rake vagrant:provision
 ```
 
@@ -30,6 +31,7 @@ Add your public ssh key to the `~/.ssh/authorized_keys` file on the server for
 the root user, then run:
 
 ```bash
+$ bundle exec librarian-chef install
 $ HOST="<hostname>" rake provision
 ```
 
