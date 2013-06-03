@@ -3,6 +3,10 @@ include_recipe "rbenv::system"
 include_recipe "nginx"
 include_recipe "gitolite::basic"
 
+link '/usr/local/sbin/nginx' do
+  to '/usr/sbin/nginx'
+end
+
 user node['dokuen']['user'] do
   action :create
 end
